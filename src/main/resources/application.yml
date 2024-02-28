@@ -1,0 +1,20 @@
+spring:
+  # Datasource: H2 im lokalen Verzeichnis ".local-db" (von Versionierung ausgeschlossen)
+  jpa:
+    open-in-view: false
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: true
+      FAIL_ON_IGNORED_PROPERTIES: true
+    property-naming-strategy: SNAKE_CASE
+
+springdoc:
+  paths-to-match:
+    - /api/**
+  swagger-ui:
+    urls:
+      - name: Todos API (Contract First modeled)
+        url: /openapi.yml
+      - name: Todos API (generated from code) # this is the default, if not configured
+        url: /v3/api-docs
+    urls-primary-name: Todos API (Contract First modeled)
