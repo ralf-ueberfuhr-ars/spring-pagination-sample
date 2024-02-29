@@ -14,6 +14,7 @@ We can compare both Page/Offset-based and Cursor-based pagination like the table
 For both types of pagination, we need a fixed sorting.
 
 |                         | **Page/Offset-based** | **Cursor-based** |
+|-------------------------|-----------------------|------------------|
 | Principle               | The first entry is identified by an index. | The first entry is identifies by its id or another unique and sortable property. |
 | Restrictions            |   | The entry must not be deleted while the cursor points on it. |
 | Data consistency        | When entries are inserted or deleted, indices will shift. So We'll get duplicated or missing entries while iterating, which is not wanted e.g. within an Infinite Scroll. | Inserting or removing entries while iterating will not move the cursor, except the cursor points to a deleted entry. |
