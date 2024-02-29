@@ -1,12 +1,21 @@
 spring:
   # Datasource: H2 im lokalen Verzeichnis ".local-db" (von Versionierung ausgeschlossen)
+  datasource:
+    url: jdbc:h2:./.local-db/data
   jpa:
     open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
   jackson:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: true
       FAIL_ON_IGNORED_PROPERTIES: true
     property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+  h2:
+    console:
+      enabled: true
 
 springdoc:
   paths-to-match:

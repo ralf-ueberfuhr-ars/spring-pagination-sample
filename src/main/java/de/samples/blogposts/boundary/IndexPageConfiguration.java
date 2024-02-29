@@ -1,4 +1,4 @@
-package de.samples.blogposts.boundary.config;
+package de.samples.blogposts.boundary;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
