@@ -1,0 +1,23 @@
+GET {{endpoint}}/cursor?pageSize=50
+Accept: application/json
+
+> {%
+  client.test("BlogPosts read successfully", () => {
+    client.assert(response.status === 200);
+    client.assert(response.body['_links'].next !== undefined);
+    client.assert(response.body['_links'].prev === undefined);
+    client.assert(response.body['_links'].last === undefined);
+  });
+  client.global.set('nextPage', response.body['_links'].next);
+%}
+
+###
+
+GET {{nextPage}}
+Accept: application/json
+
+> {%
+  client.test("BlogPosts read successfully", () => {
+    client.assert(response.status === 200);
+  });
+%}

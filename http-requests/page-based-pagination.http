@@ -1,0 +1,35 @@
+GET {{endpoint}}/pages?pageNumber=3&pageSize=50
+Accept: application/json
+
+> {%
+  client.test("BlogPosts read successfully", () => {
+    client.assert(response.status === 200);
+    client.assert(response.body['_links'].next !== undefined);
+  });
+  client.global.set('nextPage', response.body['_links'].next);
+%}
+
+###
+
+GET {{nextPage}}
+Accept: application/json
+
+> {%
+  client.test("BlogPosts read successfully", () => {
+    client.assert(response.status === 200);
+    client.assert(response.body['_links'].last !== undefined);
+  });
+  client.global.set('lastPage', response.body['_links'].last);
+%}
+
+###
+
+GET {{lastPage}}
+Accept: application/json
+
+> {%
+  client.test("BlogPosts read successfully", () => {
+    client.assert(response.status === 200);
+    client.assert(response.body['_links'].next === undefined);
+  });
+%}
