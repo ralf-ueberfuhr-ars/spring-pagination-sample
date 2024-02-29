@@ -41,7 +41,7 @@ public class BlogPostsController {
     path = "/pages",
     produces = MediaType.APPLICATION_JSON_VALUE
   )
-  PaginatedBlogPosts findAllPageBased(
+  PaginatedListRessource<BlogPostDto, PaginatedListRessource.PageBasedPaginationInfo> findAllPageBased(
     @RequestParam(defaultValue = "0")
     @Min(0)
     int pageNumber,
@@ -64,10 +64,11 @@ public class BlogPostsController {
       throw new ValidationException("Page size is too low, number of pages results in a number higher than " + Integer.MAX_VALUE);
     }
     final var maximumPageNumber = (int) maximumPageNumberLong;
-    return PaginatedBlogPosts.builder()
+    return PaginatedListRessource.
+      <BlogPostDto, PaginatedListRessource.PageBasedPaginationInfo>builder()
       .items(blogPosts)
       .pagination(
-        PaginatedBlogPosts.PageBasedPaginationInfo
+        PaginatedListRessource.PageBasedPaginationInfo
           .builder()
           .totalElements(totalElements)
           .pageNumber(pageNumber)
@@ -75,7 +76,7 @@ public class BlogPostsController {
           .build()
       )
       .links(
-        PaginatedBlogPosts.PageLinks
+        PaginatedListRessource.PageLinks
           .builder()
           .self(linkToPageBased(pageNumber, pageSize))
           .next(linkToPageBased(pageNumber + 1, pageSize, p -> p <= maximumPageNumber))
@@ -102,7 +103,7 @@ public class BlogPostsController {
     path = "/cursor",
     produces = MediaType.APPLICATION_JSON_VALUE
   )
-  PaginatedBlogPosts findAllCursorBased(
+  PaginatedListRessource<BlogPostDto, PaginatedListRessource.CursorBasedPaginationInfo<UUID>> findAllCursorBased(
     @RequestParam(required = false) // if null -> start with first or last
     UUID cursor,
     @RequestParam(defaultValue = "10")
@@ -120,17 +121,18 @@ public class BlogPostsController {
       .map(this.mapper::map)
       .toList(); // we need the collection here to create links
     final var totalElements = this.service.count();
-    return PaginatedBlogPosts.builder()
+    return PaginatedListRessource.
+      <BlogPostDto, PaginatedListRessource.CursorBasedPaginationInfo<UUID>>builder()
       .items(blogPosts.stream())
       .pagination(
-        PaginatedBlogPosts.CursorBasedPaginationInfo
-          .builder()
+        PaginatedListRessource.CursorBasedPaginationInfo
+          .<UUID>builder()
           .cursor(cursor)
           .pageSize(pageSize)
           .build()
       )
       .links(
-        PaginatedBlogPosts.PageLinks
+        PaginatedListRessource.PageLinks
           .builder()
           .self(linkToCursorBased(cursor, pageSize))
           .next(

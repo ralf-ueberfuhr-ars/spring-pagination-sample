@@ -5,12 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.net.URI;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 @Getter
 @Builder
-public class PaginatedBlogPosts {
+public class PaginatedListRessource<ItemType, PaginationType extends PaginatedListRessource.PaginationInfo> {
 
   public interface PaginationInfo {
 
@@ -28,9 +27,9 @@ public class PaginatedBlogPosts {
 
   @Getter
   @Builder
-  public static class CursorBasedPaginationInfo implements PaginationInfo {
+  public static class CursorBasedPaginationInfo<CursorType> implements PaginationInfo {
 
-    private final UUID cursor;
+    private final CursorType cursor;
     private final int pageSize;
 
   }
@@ -45,8 +44,8 @@ public class PaginatedBlogPosts {
     private final URI last;
   }
 
-  private final Stream<BlogPostDto> items;
-  private final PaginationInfo pagination;
+  private final Stream<ItemType> items;
+  private final PaginationType pagination;
   @JsonProperty("_links")
   private final PageLinks links;
 
